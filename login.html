@@ -1,0 +1,68 @@
+<div class="col-sm-12">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <b>Login</b>
+            </div>
+            <div class="panel-body">
+                <form class="form-inline" method="post" id="login-form" >
+                    <div class="form-group">
+                        <label class="sr-only" for="username">username address:</label>
+                        <input type="text" name="username" value="user" class="form-control" id="username">
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="password">Password:</label>
+                        <input type="password" name="password" value="user" class="form-control" id="password">
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4"></div>
+</div>
+
+<script>
+    $("#login-form").ready(function (e) {
+        $("#login-form").on('submit', (function (e) {
+            e.preventDefault();
+
+            var hostname = "";
+
+            hostname = localStorage.getItem('hostname');
+            
+            loading_show();
+            
+            $.ajax({
+                url: hostname + 'login.php',
+                type: "POST",
+                data: new FormData(this),
+                contentType: false,
+                cache: false,
+                processData: false,
+                crossDomain: true,
+                success: function (data)
+                {
+                    if(data['succes']==true){
+                        $("#navbar,#footer-bar").removeClass('hidden');
+                        sample_crud();
+                        app_name=localStorage.getItem('app_name');
+                        $("#nav_app_name").html(app_name);
+                        
+                    }else{
+                        alert("login gagal \nperiksa username dan password anda !");
+                    }
+                    loading_hide();
+                },
+                error: function ()
+                {
+                    alert("cek koneksi anda !");
+                    loading_hide();
+                }
+            });
+
+
+        }));
+    });
+</script>
